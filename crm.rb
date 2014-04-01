@@ -6,5 +6,18 @@ get '/' do
 end
 
 get '/contacts' do
+	erb:index
+end
+
+get '/contacts/new' do
+	erb:index
+end
+
+get 'contacts/:id' do
+	erb:index
+end
+
+get 'contact/:id/edit' do
+	erb:index
 end
 
