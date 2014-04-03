@@ -1,11 +1,11 @@
 class Contact
  
-	attr_accessor :first_name, :last_name, :job, :email
+	attr_accessor :id, :first_name, :last_name, :note, :email
     
-	def initialize(first_name, last_name, email, job)
+	def initialize(first_name, last_name, email, note)
 		@first_name = first_name
 		@last_name = last_name
 		@email = email
-		@job = job
+		@note = note
 	end
 end
