@@ -5,8 +5,6 @@ require 'data_mapper'
 
 DataMapper.setup(:default, "sqlite3:database.sqlite3")
 
-@@rolodex = Rolodex.new
-
 class Contact
 	include DataMapper::Resource
 
@@ -15,13 +13,6 @@ class Contact
 	property :last_name, String
 	property :email, String
 	property :note, String
-
-	#def initialize(first_name, last_name, email, note)
-		#@first_name = first_name
-		#@last_name = last_name
-		#@email = email
-		#@note = note
-	#end
 end
 
 DataMapper.finalize
@@ -52,7 +43,7 @@ get '/contacts/:id' do
 end
 
 get '/contacts/:id/edit' do
-	@contact = @@rolodex.find(params[:id].to_i)
+	@contact = Contact.get(params[:id].to_i)
 	if @contact
 		erb :edit_contact
 	else
@@ -61,7 +52,7 @@ get '/contacts/:id/edit' do
 end
 
 put '/contacts/:id' do
-	@contact = @@rolodex.find(params [:id].to_i)
+	@contact = Contact.get(params [:id].to_i)
 	if @contact
 		@contact.first_name = params[:first_name]
 		@contact.last_name = params[:last_name]
@@ -80,15 +71,13 @@ post '/contacts' do
 		:email => params[:email],
 		:note => params[:note]
 	)
-	#new_contact = Contact.new(params[:first_name], params[:last_name], params[:email], params[:note])
-	#@@rolodex.add_contact(new_contact)
 	redirect to ('/contacts')
 end
 
 delete '/contacts/:id' do
-	@contact = @@rolodex.find(params[:id].to_i)
+	@contact = Contact.get(params[:id].to_i)
 	if @contact
-		@@rolodex.remove_contact(@contact)
+		@contact.destroy
 		redirect to ("/contacts")
 	else
 		raise Sinatra::NotFound
