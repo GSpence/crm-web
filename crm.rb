@@ -34,6 +34,7 @@ get '/' do
 end
 
 get '/contacts' do
+	@contacts = Contact.all
 	erb :contacts
 end
 
@@ -42,7 +43,7 @@ get '/contacts/new' do
 end
 
 get '/contacts/:id' do
-	@contact = @@rolodex.find(params[:id].to_i)
+	@contact = Contact.get(params[:id].to_i)
 	if @contact
 		erb :show_contact
 	else
@@ -73,8 +74,14 @@ put '/contacts/:id' do
 end
 
 post '/contacts' do
-	new_contact = Contact.new(params[:first_name], params[:last_name], params[:email], params[:note])
-	@@rolodex.add_contact(new_contact)
+	contact = Contact.create(
+		:first_name => params[:first_name],
+		:last_name => params[:last_name],
+		:email => params[:email],
+		:note => params[:note]
+	)
+	#new_contact = Contact.new(params[:first_name], params[:last_name], params[:email], params[:note])
+	#@@rolodex.add_contact(new_contact)
 	redirect to ('/contacts')
 end
 
